@@ -41,7 +41,7 @@ app.get("/all", function(req, res) {
 // Scrape data from one site and place it into the mongodb db
 app.get("/scrape", function(req, res) {
   // Make a request via axios for the news section of `ycombinator`
-  axios.get("https://news.ycombinator.com/").then(function(response) {
+  axios.get("https://www.pcgamer.com/news/").then(function(response) {
     // Load the html body from axios into cheerio
     var $ = cheerio.load(response.data);
     // For each element with a "title" class
