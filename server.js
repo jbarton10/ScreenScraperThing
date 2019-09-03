@@ -8,6 +8,12 @@ var cheerio = require("cheerio");
 // Initialize Express
 var app = express();
 
+// Set Handlebars.
+var exphbs = require("express-handlebars");
+
+app.engine("handlebars", exphbs({ defaultLayout: "main" }));
+app.set("view engine", "handlebars");
+
 // Database configuration
 var databaseUrl = "assignment13DB";
 var collections = ["articles"];
@@ -20,7 +26,7 @@ db.on("error", function(error) {
 
 // Main route (simple Hello World Message)
 app.get("/", function(req, res) {
-  res.send("Hello world");
+  res.render("index");
 });
 
 // Retrieve data from the db
