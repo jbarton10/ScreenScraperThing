@@ -1,0 +1,23 @@
+@font-face {
+    font-family: myFirstFont;
+    src: url(./../fonts/Great\ Fighter\ Demo.ttf);
+  }
+  #titleHeader{
+    width:100%;
+    height:80px;
+    background: black;
+    text-align: center;
+    border-bottom: 2px rgb(104, 221, 241) solid;
+    
+}
+#actualTitle{
+    font-size: 60px;
+    color: rgb(245, 215, 46);
+    font-family: "New Rules - Demo";
+}
+#mainPage{
+    background: url(./../images/91152.jpg);
+    background-size: cover;
+    width:100%;
+    height:1000px;
+}
