@@ -4,24 +4,37 @@
     </div>
 
 </div>
+    <div id="extraSpace"></div>
 <div id="mainPage">
     <div class="container-fluid">
+        <div id="contentWindow">
     {{!-- This should all be in a for each loop that will corespond to the database --}}
+    {{#each articles }}
+
+
     <div class="row">
         <div class="col">
-            <div class="dbImage"></div>
+            <div class="dbImage">
+                <img src={{image}}>
+            </div>
         </div>
         <div class="col">
             <div class="row">
-                <div class="articleTitle"></div>
+                <div class="articleTitle">
+                    <p>{{header}}</p>
+                </div>
             </div>
             <div class="row">
                 <div class="articleSummaryLink">
+                    {{summary}}
+                    {{link}}
                 </div>
             </div>
         </div>
     </div>
+    {{/each}}
 
+</div>
 </div>
 
 </div>

@@ -19,5 +19,17 @@
     background: url(./../images/91152.jpg);
     background-size: cover;
     width:100%;
+    /* Should take height out after content gets populated */
     height:1000px;
+    text-align: center;
+    padding:40px;
+
 }
+#contentWindow{
+    background: white;
+    height:400px;
+    width:50%;
+    opacity: 0.25;
+    margin: auto;
+   }
+

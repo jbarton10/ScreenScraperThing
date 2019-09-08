@@ -15,8 +15,11 @@ var Article = new Schema({
     url: {
         type: String
     },
-    //Possibly include photos...
-    // photo: {
-    //     type: Image
-    // }
+    photo: {
+        type: String
+    }
 })
+
+var ArticleToAdd = mongoose.model("Article", Article);
+
+module.exports = ArticleToAdd;

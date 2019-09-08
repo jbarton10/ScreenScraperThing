@@ -29,19 +29,9 @@ var MONGODB_URI = process.env.MONGODB_URI || "mongodb://localhost/mongoHeadlines
 mongoose.connect(MONGODB_URI);
 
 
-// When the server starts, create and save a new User document to the db
-// The "unique" rule in the User model's schema will prevent duplicate users from being added to the server
-// db.User.create({ name: "Ernest Hemingway" })
-//   .then(function(dbUser) {
-//     console.log(dbUser);
-//   })
-//   .catch(function(err) {
-//     console.log(err.message);
-//   });
-
 // Routes
 app.get("/", function(req,res){
-  res.render("index")
+  res.render("index", db)
 
 });
 
@@ -63,9 +53,9 @@ app.get("/notes", function(req, res) {
 app.get("/user", function(req, res) {
   // Find all Users
   db.User.find({})
-    .then(function(dbUser) {
+    .then(function(articles) {
       // If all Users are successfully found, send them back to the client
-      res.json(dbUser);
+      res.json(articles);
     })
     .catch(function(err) {
       // If an error occurs, send the error back to the client
@@ -76,7 +66,7 @@ app.get("/user", function(req, res) {
 // Route for saving a new Note to the db and associating it with a User
 app.post("/submit", function(req, res) {
   // Create a new Note in the db
-  db.Note.create(req.body)
+  db.articles.create(req.body)
     .then(function(dbNote) {
       // If a Note was created successfully, find one User (there's only one) and push the new Note's _id to the User's `notes` array
       // { new: true } tells the query that we want it to return the updated User -- it returns the original by default
@@ -96,7 +86,7 @@ app.post("/submit", function(req, res) {
 // Route to get all User's and populate them with their notes
 app.get("/populateduser", function(req, res) {
   // Find all users
-  db.User.find({})
+  db.articles.find({})
     // Specify that we want to populate the retrieved users with any associated notes
     .populate("notes")
     .then(function(dbUser) {
@@ -109,7 +99,7 @@ app.get("/populateduser", function(req, res) {
     });
 });
 
-
+//Function for scraping data
 app.get("/scrape", function(req, res) {
   // Make a request via axios for the news section of `ycombinator`
   axios.get("https://www.pcgamer.com/news/").then(function(response) {
@@ -127,30 +117,33 @@ app.get("/scrape", function(req, res) {
       var header = $(element).find(".article-name").text();
       //Summary for each of the articles
       var summary = $(element).find(".synopsis").text().trim();
+      console.log(image);
 
   
-  //     // If this found element had both a title and a link
-  //     if (title && link) {
-  //       // Insert the data in the scrapedData db
-  //       db.scrapedData.insert({
-  //         title: title,
-  //         link: link
-  //       },
-  //       function(err, inserted) {
-  //         if (err) {
-  //           // Log the error if one is encountered during the query
-  //           console.log(err);
-  //         }
-  //         else {
-  //           // Otherwise, log the inserted data
-  //           console.log(inserted);
-  //         }
-  //       });
-  //     }
+      // If this found element had both a title and a link
+      if (image && link && header && summary) {
+        // Insert the data in the scrapedData db
+        db.articles.insert({
+          image: image,
+          link: link,
+          header: header,
+          summary: summary
+        },
+        function(err, inserted) {
+          if (err) {
+            // Log the error if one is encountered during the query
+            console.log("this shit isnt working");
+          }
+          else {
+            // Otherwise, log the inserted data
+            console.log(inserted);
+          }
+        });
+      }
     });
   });
 
-  // Send a "Scrape Complete" message to the browser
+  // // Send a "Scrape Complete" message to the browser
   res.send("Scrape Complete");
 });
 
