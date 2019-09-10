@@ -34,16 +34,18 @@ mongoose.connect(MONGODB_URI);
 // Routes
 app.get("/", function(req,res){
   db.Article.find({}).then(function(data){
-    console.log(data)
-    console.log(data === null);
+  
     if (data.length <= 0){
-      scrape();
+      scrape(function(data2){
+        res.render("index", {articles: data2})
+      });
+     
     }
-    res.render("index", {articles: data})
-  
-  });
-  
+    else{
+      res.render("index", {articles: data})
+    }
 
+  });
 });
 
 // Route for retrieving all Notes from the db
@@ -94,23 +96,8 @@ app.post("/submit", function(req, res) {
     });
 });
 
-// Route to get all User's and populate them with their notes
-app.get("/populateduser", function(req, res) {
-  // Find all users
-  db.articles.find({})
-    // Specify that we want to populate the retrieved users with any associated notes
-    .populate("notes")
-    .then(function(dbUser) {
-      // If able to successfully find and associate all Users and Notes, send them back to the client
-      res.json(dbUser);
-    })
-    .catch(function(err) {
-      // If an error occurs, send it back to the client
-      res.json(err);
-    });
-});
 
-function scrape(){
+function scrape(cb){
  
   // Make a request via axios for the news section of `ycombinator`
   axios.get("https://www.pcgamer.com/news/").then(function(response) {
@@ -157,10 +144,12 @@ function scrape(){
           else {
             // Otherwise, log the inserted data
             // console.log(inserted);
+            
           }
         });
       }
     });
+    cb(inserted);
   });
 
 
