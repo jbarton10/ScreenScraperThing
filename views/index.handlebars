@@ -11,7 +11,7 @@
     {{!-- This should all be in a for each loop that will corespond to the database --}}
     {{#each articles }}
 
-
+    <div class="article">
     <div class="row">
         <div class="col">
             <div class="dbImage">
@@ -27,10 +27,11 @@
             <div class="row">
                 <div class="articleSummaryLink">
                     {{summary}}
-                    {{url}}
+                    <a href={{url}}>Link</a>
                 </div>
             </div>
         </div>
+    </div>
     </div>
     {{/each}}
 

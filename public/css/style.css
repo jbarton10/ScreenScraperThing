@@ -16,20 +16,31 @@
     font-family: "New Rules - Demo";
 }
 #mainPage{
-    background: url(./../images/91152.jpg);
+    background: url("./../images/91152.jpg");
+    background-repeat: no-repeat;
+    background-attachment: fixed;
     background-size: cover;
     width:100%;
-    /* Should take height out after content gets populated */
-    height:1000px;
+    height:100%;
     text-align: center;
-    padding:40px;
+    padding:40px;   
+
 
 }
 #contentWindow{
-    background: white;
-    height:400px;
+
     width:50%;
-    opacity: 0.25;
     margin: auto;
+    margin-bottom: 40px;
    }
+.article{
+    opacity: 1.0;
+    background:lightgray;
+    padding:20px;
+    margin-top:20px;
+    margin-bottom:20px
+}
+.articleTitle{
+    font-weight: bold;
+}
 
