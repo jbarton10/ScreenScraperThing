@@ -24,14 +24,14 @@ app.use(express.json());
 app.use(express.static("public"));
 
 // Connect to the Mongo DB
-var MONGODB_URI = process.env.MONGODB_URI || "mongodb://localhost/mongoHeadlines";
+var MONGODB_URI = process.env.MONGODB_URI || "mongodb://localhost/assignment13db";
 
 mongoose.connect(MONGODB_URI);
 
 
 // Routes
 app.get("/", function(req,res){
-  res.render("index", db)
+  res.render("index")
 
 });
 
@@ -117,7 +117,14 @@ app.get("/scrape", function(req, res) {
       var header = $(element).find(".article-name").text();
       //Summary for each of the articles
       var summary = $(element).find(".synopsis").text().trim();
-      console.log(image);
+      // console.log("-" + header);
+      // console.log("-" + summary);
+      // console.log("-" + link);
+      // console.log("-" + image);
+      // console.log("-------------------------------");
+     
+   
+
 
   
       // If this found element had both a title and a link
