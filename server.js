@@ -6,7 +6,7 @@ var cheerio = require("cheerio");
 var PORT = 3000;
 
 // Require all models
-var db = require("./models/articles");
+var db = require("./models");
 
 // Initialize Express
 var app = express();
@@ -24,14 +24,24 @@ app.use(express.json());
 app.use(express.static("public"));
 
 // Connect to the Mongo DB
-var MONGODB_URI = process.env.MONGODB_URI || "mongodb://localhost/assignment13db";
+var MONGODB_URI = process.env.MONGODB_URI || "mongodb://localhost/assignment13DB";
 
+
+//Not sure, but I think there is something wrong with mongoose?
 mongoose.connect(MONGODB_URI);
 
 
 // Routes
 app.get("/", function(req,res){
-  res.render("index")
+  db.Article.find({}, function(data){
+    console.log(data);
+    if (data === null){
+      scrape();
+    }
+    res.render("index", db)
+  
+  });
+  
 
 });
 
@@ -66,7 +76,7 @@ app.get("/user", function(req, res) {
 // Route for saving a new Note to the db and associating it with a User
 app.post("/submit", function(req, res) {
   // Create a new Note in the db
-  db.articles.create(req.body)
+  db.Articles.create(req.body)
     .then(function(dbNote) {
       // If a Note was created successfully, find one User (there's only one) and push the new Note's _id to the User's `notes` array
       // { new: true } tells the query that we want it to return the updated User -- it returns the original by default
@@ -99,8 +109,8 @@ app.get("/populateduser", function(req, res) {
     });
 });
 
-//Function for scraping data
-app.get("/scrape", function(req, res) {
+function scrape(){
+ 
   // Make a request via axios for the news section of `ycombinator`
   axios.get("https://www.pcgamer.com/news/").then(function(response) {
     // Load the html body from axios into cheerio
@@ -124,35 +134,36 @@ app.get("/scrape", function(req, res) {
       // console.log("-------------------------------");
      
    
-
-
+      // console.log('----------------------------------------------')
+      // console.log('DB', db);
+      // console.log('----------------------------------------------')
   
       // If this found element had both a title and a link
       if (image && link && header && summary) {
         // Insert the data in the scrapedData db
-        db.articles.insert({
-          image: image,
-          link: link,
-          header: header,
+        db.Article.create({
+          photo: image,
+          url: link,
+          headline: header,
           summary: summary
         },
         function(err, inserted) {
           if (err) {
+            console.log(err)
             // Log the error if one is encountered during the query
             console.log("this shit isnt working");
           }
           else {
             // Otherwise, log the inserted data
-            console.log(inserted);
+            // console.log(inserted);
           }
         });
       }
     });
   });
 
-  // // Send a "Scrape Complete" message to the browser
-  res.send("Scrape Complete");
-});
+
+};
 
 // Start the server
 app.listen(PORT, function() {

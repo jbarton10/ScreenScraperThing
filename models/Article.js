@@ -4,7 +4,7 @@ var Schema = mongoose.Schema;
 
 
 
-var Article = new Schema({
+var ArticleSchema = new Schema({
 
     headline: {
         type: String
@@ -20,6 +20,6 @@ var Article = new Schema({
     }
 })
 
-var ArticleToAdd = mongoose.model("Article", Article);
+var Article = mongoose.model("Article" ,ArticleSchema);
 
-module.exports = ArticleToAdd;
+module.exports = Article;
