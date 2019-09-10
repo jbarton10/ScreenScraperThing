@@ -3,7 +3,7 @@ var mongoose = require("mongoose");
 var axios = require("axios");
 var cheerio = require("cheerio");
 
-var PORT = 3000;
+var PORT = process.env.PORT ||3000;
 
 // Require all models
 var db = require("./models");
@@ -33,12 +33,13 @@ mongoose.connect(MONGODB_URI);
 
 // Routes
 app.get("/", function(req,res){
-  db.Article.find({}, function(data){
-    console.log(data);
-    if (data === null){
+  db.Article.find({}).then(function(data){
+    console.log(data)
+    console.log(data === null);
+    if (data.length <= 0){
       scrape();
     }
-    res.render("index", db)
+    res.render("index", {articles: data})
   
   });
   
